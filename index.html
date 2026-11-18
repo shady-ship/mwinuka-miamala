@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mwinuka Home Shopping Center - Mfumo wa Miamala ya Wateja</title>
+    <style>
+        :root {
+            --primary: #1a5f7a;
+            --secondary: #159895;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --light: #f8f9fa;
+            --dark: #212529;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--dark);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        header {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        header h1 { font-size: 2.2rem; margin-bottom: 5px; }
+        header p { opacity: 0.9; font-size: 1.1rem; }
+        .content { padding: 30px; }
+        .form-section {
+            background: var(--light);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border: 1px solid #e9ecef;
+        }
+        .form-section h2 { margin-bottom: 20px; color: var(--primary); }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        label { display: block; font-weight: 600; margin-bottom: 5px; color: #495057; }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border 0.2s;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(21,152,149,0.2);
+        }
+        .btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn:hover { background: #117a76; }
+        .btn-secondary { background: #6c757d; }
+        .btn-secondary:hover { background: #5a6268; }
+        .btn-danger { background: var(--danger); }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--primary);
+        }
+        .stat-card.success { border-left-color: var(--success); }
+        .stat-card.danger { border-left-color: var(--danger); }
+        .stat-card.warning { border-left-color: var(--warning); }
+        .stat-number { font-size: 2rem; font-weight: bold; }
+        .table-container { overflow-x: auto; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 14px 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+        tr:hover { background: #f8f9fa; }
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .status-green { background: #d4edda; color: #155724; }
+        .status-red { background: #f8d7da; color: #721c24; }
+        .status-yellow { background: #fff3cd; color: #856404; }
+        .actions button {
+            margin-right: 5px;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            border-radius: 6px;
+        }
+        .search-box {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .search-box input { flex: 1; }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #f1f3f5;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        .difference { font-weight: bold; }
+        .positive { color: var(--success); }
+        .negative { color: var(--danger); }
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.6rem; }
+            .content { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏪 Mwinuka Home Shopping Center</h1>
+            <p>Mfumo wa Kufuatilia Miamala ya Wateja</p>
+        </header>
+
+        <div class="content">
+            <!-- Stats -->
+            <div class="stats" id="stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalTrans">0</div>
+                    <div>Jumla ya Miamala</div>
+                </div>
+                <div class="stat-card success">
+                    <div class="stat-number" id="greenCount">0</div>
+                    <div>✅ Imekamilika</div>
+                </div>
+                <div class="stat-card danger">
+                    <div class="stat-number" id="redCount">0</div>
+                    <div>❌ Haiendani</div>
+                </div>
+                <div class="stat-card warning">
+                    <div class="stat-number" id="yellowCount">0</div>
+                    <div>⏳ Pending</div>
+                </div>
+            </div>
+
+            <!-- Add Form -->
+            <div class="form-section">
+                <h2>➕ Ongeza Miamala Mpya</h2>
+                <form id="transactionForm">
+                    <div class="form-grid">
+                        <div>
+                            <label for="employee">Jina la Mteja</label>
+                            <input type="text" id="employee" required placeholder="Mfano: Juma Hassan">
+                        </div>
+                        <div>
+                            <label for="goods">Maelezo ya Mzigo</label>
+                            <input type="text" id="goods" required placeholder="Mfano: Simu 3, Saa 5, Chaja 10">
+                        </div>
+                        <div>
+                            <label for="goodsValue">Thamani ya Mzigo (TSh)</label>
+                            <input type="number" id="goodsValue" required min="0" step="100" placeholder="0">
+                        </div>
+                        <div>
+                            <label for="moneyDeposited">Fedha Zilizowekwa (TSh)</label>
+                            <input type="number" id="moneyDeposited" required min="0" step="100" placeholder="0">
+                        </div>
+                        <div>
+                            <label for="date">Tarehe</label>
+                            <input type="date" id="date" required>
+                        </div>
+                        <div>
+                            <label for="notes">Maelezo ya Ziada (Hiari)</label>
+                            <input type="text" id="notes" placeholder="Maelezo mengine...">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">Hifadhi Miamala</button>
+                    <button type="button" class="btn btn-secondary" onclick="resetForm()" style="margin-left:10px;">Futa Fomu</button>
+                </form>
+            </div>
+
+            <!-- Search -->
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 Tafuta kwa jina la mteja, mzigo au tarehe...">
+            </div>
+
+            <!-- Table -->
+            <div class="table-container">
+                <table id="transactionsTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Mteja</th>
+                            <th>Mzigo</th>
+                            <th>Thamani (TSh)</th>
+                            <th>Fedha (TSh)</th>
+                            <th>Tofauti</th>
+                            <th>Tarehe</th>
+                            <th>Hali</th>
+                            <th>Vitendo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+
+            <!-- Ripoti Section -->
+            <div class="form-section" style="margin-top: 30px;" id="reportSection">
+                <h2>📊 Ripoti ya Miamala</h2>
+                
+                <div class="form-grid" style="margin-bottom: 20px;">
+                    <div>
+                        <label for="reportFrom">Kuanzia Tarehe</label>
+                        <input type="date" id="reportFrom">
+                    </div>
+                    <div>
+                        <label for="reportTo">Hadi Tarehe</label>
+                        <input type="date" id="reportTo">
+                    </div>
+                    <div style="display: flex; align-items: flex-end; gap: 10px;">
+                        <button type="button" class="btn" onclick="generateReport()">Onyesha Ripoti</button>
+                        <button type="button" class="btn btn-secondary" onclick="printReport()">🖨️ Chapisha</button>
+                    </div>
+                </div>
+
+                <div id="reportResults" style="display: none;">
+                    <div class="stats" style="margin-bottom: 20px;">
+                        <div class="stat-card">
+                            <div class="stat-number" id="reportTotal">0</div>
+                            <div>Jumla ya Miamala</div>
+                        </div>
+                        <div class="stat-card success">
+                            <div class="stat-number" id="reportGreen">0</div>
+                            <div>✅ Imekamilika</div>
+                        </div>
+                        <div class="stat-card danger">
+                            <div class="stat-number" id="reportRed">0</div>
+                            <div>❌ Haiendani</div>
+                        </div>
+                        <div class="stat-card warning">
+                            <div class="stat-number" id="reportYellow">0</div>
+                            <div>⏳ Pending</div>
+                        </div>
+                    </div>
+
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                        <h3 style="margin-bottom: 15px; color: #1a5f7a;">Muhtasari wa Fedha</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                            <div>
+                                <strong>Jumla ya Thamani ya Mizigo:</strong><br>
+                                <span id="reportGoodsTotal" style="font-size: 1.3rem; color: #1a5f7a;">0 TSh</span>
+                            </div>
+                            <div>
+                                <strong>Jumla ya Fedha Zilizopokelewa:</strong><br>
+                                <span id="reportMoneyTotal" style="font-size: 1.3rem; color: #28a745;">0 TSh</span>
+                            </div>
+                            <div>
+                                <strong>Tofauti ya Jumla:</strong><br>
+                                <span id="reportDiffTotal" style="font-size: 1.3rem;">0 TSh</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p id="reportPeriod" style="color: #6c757d; margin-bottom: 10px;"></p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            © 2026 Mwinuka Home Shopping Center | Mfumo wa Kufuatilia Miamala ya Wateja
+        </footer>
+    </div>
+
+    <script>
+        let transactions = JSON.parse(localStorage.getItem('mwinukaTransactions')) || [];
+        let editId = null;
+
+        // Set today's date as default
+        document.getElementById('date').valueAsDate = new Date();
+
+        function calculateStatus(goodsValue, money) {
+            const diff = money - goodsValue;
+            if (Math.abs(diff) < 1) return 'green'; // Exact match (allow small float)
+            if (money < goodsValue) return 'red';
+            return 'yellow'; // Overpaid or pending verification
+        }
+
+        function getStatusHTML(status) {
+            if (status === 'green') return '<span class="status status-green">✅ Imekamilika</span>';
+            if (status === 'red') return '<span class="status status-red">❌ Haiendani</span>';
+            return '<span class="status status-yellow">⏳ Pending</span>';
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('sw-TZ', { style: 'decimal' }).format(amount) + ' TSh';
+        }
+
+        function renderTable(data = transactions) {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:#6c757d;">Hakuna miamala bado. Ongeza miamala ya kwanza!</td></tr>';
+                updateStats();
+                return;
+            }
+
+            data.forEach((t, index) => {
+                const diff = t.money - t.goodsValue;
+                const diffClass = diff >= 0 ? 'positive' : 'negative';
+                const diffText = diff === 0 ? '0' : (diff > 0 ? '+' : '') + formatCurrency(diff);
+
+                const row = `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td><strong>${t.employee}</strong></td>
+                        <td>${t.goods}</td>
+                        <td>${formatCurrency(t.goodsValue)}</td>
+                        <td>${formatCurrency(t.money)}</td>
+                        <td class="difference ${diffClass}">${diffText}</td>
+                        <td>${new Date(t.date).toLocaleDateString('sw-TZ')}</td>
+                        <td>${getStatusHTML(t.status)}</td>
+                        <td class="actions">
+                            <button class="btn btn-secondary" onclick="editTransaction(${t.id})">Hariri</button>
+                            <button class="btn btn-danger" onclick="deleteTransaction(${t.id})">Futa</button>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+            updateStats();
+        }
+
+        function updateStats() {
+            document.getElementById('totalTrans').textContent = transactions.length;
+            document.getElementById('greenCount').textContent = transactions.filter(t => t.status === 'green').length;
+            document.getElementById('redCount').textContent = transactions.filter(t => t.status === 'red').length;
+            document.getElementById('yellowCount').textContent = transactions.filter(t => t.status === 'yellow').length;
+        }
+
+        function saveTransactions() {
+            localStorage.setItem('mwinukaTransactions', JSON.stringify(transactions));
+        }
+
+        document.getElementById('transactionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const employee = document.getElementById('employee').value.trim();
+            const goods = document.getElementById('goods').value.trim();
+            const goodsValue = parseFloat(document.getElementById('goodsValue').value);
+            const money = parseFloat(document.getElementById('moneyDeposited').value);
+            const date = document.getElementById('date').value;
+            const notes = document.getElementById('notes').value.trim();
+
+            const status = calculateStatus(goodsValue, money);
+
+            if (editId !== null) {
+                const index = transactions.findIndex(t => t.id === editId);
+                if (index !== -1) {
+                    transactions[index] = { id: editId, employee, goods, goodsValue, money, date, notes, status };
+                }
+                editId = null;
+                document.querySelector('#transactionForm button[type="submit"]').textContent = 'Hifadhi Miamala';
+            } else {
+                const newTrans = {
+                    id: Date.now(),
+                    employee,
+                    goods,
+                    goodsValue,
+                    money,
+                    date,
+                    notes,
+                    status
+                };
+                transactions.unshift(newTrans); // Add to top
+            }
+
+            saveTransactions();
+            renderTable();
+            this.reset();
+            document.getElementById('date').valueAsDate = new Date();
+            alert(editId === null ? 'Miamala imehifadhiwa!' : 'Miamala imebadilishwa!');
+        });
+
+        function editTransaction(id) {
+            const t = transactions.find(x => x.id === id);
+            if (!t) return;
+
+            document.getElementById('employee').value = t.employee;
+            document.getElementById('goods').value = t.goods;
+            document.getElementById('goodsValue').value = t.goodsValue;
+            document.getElementById('moneyDeposited').value = t.money;
+            document.getElementById('date').value = t.date;
+            document.getElementById('notes').value = t.notes || '';
+
+            editId = id;
+            document.querySelector('#transactionForm button[type="submit"]').textContent = 'Sasisha Miamala';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function deleteTransaction(id) {
+            if (confirm('Una uhakika unataka kufuta miamala hii?')) {
+                transactions = transactions.filter(t => t.id !== id);
+                saveTransactions();
+                renderTable();
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('transactionForm').reset();
+            document.getElementById('date').valueAsDate = new Date();
+            editId = null;
+            document.querySelector('#transactionForm button[type="submit"]').textContent = 'Hifadhi Miamala';
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const term = e.target.value.toLowerCase();
+            const filtered = transactions.filter(t =>
+                t.employee.toLowerCase().includes(term) ||
+                t.goods.toLowerCase().includes(term) ||
+                t.date.includes(term)
+            );
+            renderTable(filtered);
+        });
+
+        // Report functions
+        function generateReport() {
+            const fromDate = document.getElementById('reportFrom').value;
+            const toDate = document.getElementById('reportTo').value;
+
+            let filtered = [...transactions];
+
+            if (fromDate) {
+                filtered = filtered.filter(t => t.date >= fromDate);
+            }
+            if (toDate) {
+                filtered = filtered.filter(t => t.date <= toDate);
+            }
+
+            // Update counts
+            document.getElementById('reportTotal').textContent = filtered.length;
+            document.getElementById('reportGreen').textContent = filtered.filter(t => t.status === 'green').length;
+            document.getElementById('reportRed').textContent = filtered.filter(t => t.status === 'red').length;
+            document.getElementById('reportYellow').textContent = filtered.filter(t => t.status === 'yellow').length;
+
+            // Money summary
+            const goodsTotal = filtered.reduce((sum, t) => sum + (t.goodsValue || 0), 0);
+            const moneyTotal = filtered.reduce((sum, t) => sum + (t.money || 0), 0);
+            const diffTotal = moneyTotal - goodsTotal;
+
+            document.getElementById('reportGoodsTotal').textContent = formatCurrency(goodsTotal);
+            document.getElementById('reportMoneyTotal').textContent = formatCurrency(moneyTotal);
+
+            const diffEl = document.getElementById('reportDiffTotal');
+            diffEl.textContent = (diffTotal >= 0 ? '+' : '') + formatCurrency(diffTotal);
+            diffEl.style.color = diffTotal >= 0 ? '#28a745' : '#dc3545';
+
+            // Period text
+            let periodText = 'Kipindi: ';
+            if (fromDate && toDate) {
+                periodText += `Kuanzia ${fromDate} hadi ${toDate}`;
+            } else if (fromDate) {
+                periodText += `Kuanzia ${fromDate}`;
+            } else if (toDate) {
+                periodText += `Hadi ${toDate}`;
+            } else {
+                periodText += 'Miamala yote';
+            }
+            document.getElementById('reportPeriod').textContent = periodText + ` (${filtered.length} miamala)`;
+
+            document.getElementById('reportResults').style.display = 'block';
+        }
+
+        function printReport() {
+            // Ensure report is generated first
+            if (document.getElementById('reportResults').style.display === 'none') {
+                generateReport();
+            }
+
+            const printContent = document.getElementById('reportSection').innerHTML;
+            const originalContent = document.body.innerHTML;
+
+            document.body.innerHTML = `
+                <div style="font-family: Arial, sans-serif; padding: 20px;">
+                    <h1 style="text-align: center; color: #1a5f7a;">Mwinuka Home Shopping Center</h1>
+                    <h2 style="text-align: center;">Ripoti ya Miamala ya Wateja</h2>
+                    <p style="text-align: center; color: #666;">Tarehe ya Ripoti: ${new Date().toLocaleDateString('sw-TZ')}</p>
+                    <hr>
+                    ${printContent}
+                </div>
+            `;
+            window.print();
+            document.body.innerHTML = originalContent;
+
+            // Re-attach event listeners by reloading scripts effectively
+            location.reload();
+        }
+
+        // Initial render
+        renderTable();
+    </script>
+</body>
+</html>
